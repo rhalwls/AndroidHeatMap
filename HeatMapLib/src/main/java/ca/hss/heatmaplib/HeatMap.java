@@ -20,6 +20,7 @@ package ca.hss.heatmaplib;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -33,7 +34,11 @@ import android.graphics.Shader;
 import androidx.annotation.AnyThread;
 import androidx.annotation.WorkerThread;
 import androidx.annotation.ColorInt;
+
+import android.graphics.drawable.BitmapDrawable;
+import android.os.Debug;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -442,8 +447,29 @@ public class HeatMap extends View implements View.OnTouchListener {
         } finally {
             a.recycle();
         }
-    }
 
+    }
+    //mj01150219 add overlayimage
+    public void addOverlayImage(Canvas canvas){
+        //점추가하는 코드랑 비슷하게 해보자
+        Paint paint = new Paint();
+        paint.setStyle(Paint.Style.FILL_AND_STROKE);
+        //paint.setFilterBitmap(true);
+        paint.setColor(0xFF00FFFF);
+
+        Log.i("mj","overlay alpha : "+paint.getAlpha());
+        canvas.drawCircle(50,50,100,paint);
+        Resources r = getResources();
+
+        BitmapDrawable bitmapDrawable = (BitmapDrawable) r.getDrawable(R.mipmap.face);
+        Bitmap bitmap = bitmapDrawable.getBitmap();
+
+        paint = new Paint();
+        paint.setStyle(Paint.Style.FILL_AND_STROKE);
+        //paint.setFilterBitmap(true);
+        paint.setColor(0xFF0000FF);
+        canvas.drawBitmap(bitmap,0,0,paint);
+    }
     /**
      * Force a refresh of the heat map.
      *
@@ -796,6 +822,8 @@ public class HeatMap extends View implements View.OnTouchListener {
                 mMarkerCallback.drawMarker(canvas, rx, ry, point);
             }
         }
+
+        addOverlayImage(canvas);
     }
 
     private float touchX;

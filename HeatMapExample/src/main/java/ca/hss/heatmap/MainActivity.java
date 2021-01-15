@@ -21,7 +21,10 @@ package ca.hss.heatmap;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import androidx.annotation.AnyThread;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -38,6 +41,8 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
     private HeatMap map;
     private boolean testAsync = false;
 
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +60,11 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
         map.setBottomPadding(100);
         map.setMarkerCallback(new HeatMapMarkerCallback.CircleHeatMapMarker(0xff9400D3));
         map.setRadius(80.0);
+        //map.setBackgroundResource(R.mipmap.ic_launcher);//걍 이 이미지만 뜸 ㅠㅠ 벡터라 빈 곳은 맵이 비칠줄알았는데
+        //map.setForeground(getDrawable(R.mipmap.ic_launcher));//위에 코드랑 똑같음 그리고 이 함수는 view에 속해있는 거임..
+        //canvas사용했을때
+
+
         Map<Float, Integer> colors = new ArrayMap<>();
         //build a color gradient in HSV from red at the center to green at the outside
         for (int i = 0; i < 21; i++) {
@@ -70,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
                 addData();
             }
         });
+
     }
 
     private void addData() {
